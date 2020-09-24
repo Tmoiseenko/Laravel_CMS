@@ -41,6 +41,12 @@
                 Опубликовать
             </label>
         </div>
+        <div class="form-group">
+            <label for="InputTag">Теги</label>
+            <input type="text" class="form-control @error('excerpt') is-invalid @enderror"
+                   id="InputTag" name="tags"
+                   value="{{ old('tags', $post->tags->pluck('name')->implode(',')) }}">
+        </div>
         <button type="submit" class="btn btn-primary">Изменить</button>
     </form>
 

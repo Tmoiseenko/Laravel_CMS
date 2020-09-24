@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 // posts
 Route::get('/', 'PostsController@index');
+Route::get('/post/tag/{tag}', 'TagsController@index');
 Route::resource('/post', 'PostsController');
 
 //pages
@@ -24,5 +25,7 @@ Route::get('/contact', 'PagesController@contact');
 //feedback
 Route::get('/admin/feedback', 'FeedbackController@feedback');
 Route::post('/admin/feedback', 'FeedbackController@feedbackCreate');
+
+
 
 

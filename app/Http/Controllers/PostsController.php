@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Tag;
 use Illuminate\Http\Request;
 use App\Post;
 
@@ -98,6 +99,18 @@ class PostsController extends Controller
         ]);
 
         $post->update($attributes);
+
+        $postTags = $post->tags->keyBy('name');
+        $tags = collect(explode(',', request('tags')))->keyBy(function ($item) { return $item; } );
+        $syncIds = $postTags->intersectByKeys($tags)->pluck('id')->toArray();
+        $postToAttach = $tags->diffKeys($postTags);
+
+        foreach ($postToAttach as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $syncIds[] = $tag->id;
+        }
+
+        $post->tags()->sync($syncIds);
 
         return redirect('/');
     }
