@@ -2,10 +2,10 @@
 
 @section('content')
     <h3 class="pb-3 mb-4 font-italic border-bottom">
-        From the Firehose
+        {{ $title }}
     </h3>
     @include('layout.errors')
-    <form method="post" action="/post/create">
+    <form method="post" action="/post">
         @csrf
         <div class="form-group">
             <label for="InputSlug">Введите Символьный код</label>

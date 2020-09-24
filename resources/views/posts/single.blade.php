@@ -8,5 +8,7 @@
 
     <p>{{ $post->content }}</p>
 
+    <p><a href="/post/{{ $post->slug }}/edit" class="btn btn-outline-info">Изменить</a></p>
     <p><a href="/">На главную</a></p>
+
 @endsection
