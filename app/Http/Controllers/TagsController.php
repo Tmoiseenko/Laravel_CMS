@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TagsController extends Controller
 {
@@ -15,9 +16,13 @@ class TagsController extends Controller
      */
     public function index(Tag $tag)
     {
-        $posts = $tag->posts()->with('tags')->get();
-        $title = 'Блог Laravel-Skillbox';
-        return view('posts.index', compact('posts', 'title'));
+        if (Auth::check()) {
+            $posts = $tag->posts()->where('user_id', Auth::id())->get();
+        } else {
+            $posts = $tag->posts()->with('tags')->get();
+        }
+
+        return view('posts.index', compact('posts'));
     }
 
 }

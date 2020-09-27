@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PostCreated;
+use App\Mail\PostDeleted;
+use App\Mail\PostUpdated;
 use App\Tag;
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,10 +25,13 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::published()->latest()->get();
-        $title = 'Блог Laravel-Skillbox';
+        if (Auth::check()) {
+            $posts = \auth()->user()->posts()->published()->latest()->get();
+        } else {
+            $posts = Post::published()->latest()->get();
+        }
 
-        return view('posts.index', compact('posts', 'title'));
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -52,8 +64,11 @@ class PostsController extends Controller
             'excerpt' => 'required|max:255',
             'content' => 'required',
         ]);
+        $request['user_id'] = Auth::id();
 
-        Post::create($request->all());
+        $post = Post::create($request->all());
+        flash("Новая статья успешно создана");
+        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostCreated($post));
 
         return redirect('/');
     }
@@ -78,6 +93,7 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('update', $post);
         $title = 'Редактирование статьи';
         return view('posts.edit', compact('post', 'title'));
     }
@@ -91,6 +107,8 @@ class PostsController extends Controller
      */
     public function update(Post $post)
     {
+
+
         $attributes = request()->validate([
             'title' => 'required|min:5|max:100',
             'slug' => 'required',
@@ -111,7 +129,8 @@ class PostsController extends Controller
         }
 
         $post->tags()->sync($syncIds);
-
+        flash("Статья успешно обновлена");
+        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostUpdated($post));
         return redirect('/');
     }
 
@@ -123,7 +142,12 @@ class PostsController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('delete', $post);
+        $deletedPost = $post;
         $post->delete();
+//        dd($deletedPost->title);
+        flash("Статья удалена", 'warning');
+        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostDeleted($deletedPost));
         return redirect('/');
     }
 }

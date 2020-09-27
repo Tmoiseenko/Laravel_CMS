@@ -26,6 +26,5 @@ Route::get('/contact', 'PagesController@contact');
 Route::get('/admin/feedback', 'FeedbackController@feedback');
 Route::post('/admin/feedback', 'FeedbackController@feedbackCreate');
 
-
-
+Auth::routes();
 
