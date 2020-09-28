@@ -144,10 +144,10 @@ class PostsController extends Controller
     {
         $this->authorize('delete', $post);
         $deletedPost = $post;
-        $post->delete();
-//        dd($deletedPost->title);
-        flash("Статья удалена", 'warning');
         \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostDeleted($deletedPost));
+        $post->delete();
+        flash("Статья удалена", 'warning');
+
         return redirect('/');
     }
 }

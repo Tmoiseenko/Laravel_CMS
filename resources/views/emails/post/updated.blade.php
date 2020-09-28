@@ -1,12 +1,12 @@
 @component('mail::message')
-    Статья обновлена: "{{ $post->title }}"
+Статья обновлена: "{{ $post->title }}"
 
-    {{ $post->excerpt }}
+{{ $post->excerpt }}
 
-    @component('mail::button', ['url' => '/post/' . $post->slug])
-        Прочитать
-    @endcomponent
+@component('mail::button', ['url' => '/post/' . $post->slug])
+Посмотреть
+@endcomponent
 
-    Thanks,<br>
-    {{ config('app.name') }}
+Thanks,<br>
+{{ config('app.name') }}
 @endcomponent

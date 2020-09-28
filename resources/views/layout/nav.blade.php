@@ -8,9 +8,9 @@
     <div class="col-4 d-flex justify-content-end align-items-center">
             <!-- Authentication Links -->
             @guest
-                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    <a class="nav-link" href="{{ route('login') }}">Войти</a>
                 @if (Route::has('register'))
-                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        <a class="nav-link" href="{{ route('register') }}">Регистрация</a>
                 @endif
             @else
                     <a class="nav-link">
@@ -20,7 +20,7 @@
                         <a class="nav-link" href="{{ route('logout') }}"
                            onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
+                            Выйти
                         </a>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
