@@ -14,17 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 // posts
-Route::get('/', 'PostsController@index');
-Route::get('/post/tag/{tag}', 'TagsController@index');
+Route::get('/', 'PostsController@index')->name('home');
+Route::get('/post/tag/{tag}', 'TagsController@index')->name('tag.show');
 Route::resource('/post', 'PostsController');
 
 //pages
-Route::get('/about', 'PagesController@about');
-Route::get('/contact', 'PagesController@contact');
+Route::get('/about', 'PagesController@about')->name('about');
+Route::get('/contact', 'PagesController@contact')->name('contact');
 
 //feedback
-Route::get('/admin/feedback', 'FeedbackController@feedback');
-Route::post('/admin/feedback', 'FeedbackController@feedbackCreate');
+Route::get('/admin/feedback', 'FeedbackController@feedback')->name('feedback.show');
+Route::post('/admin/feedback', 'FeedbackController@feedbackCreate')->name('feedback.create');
 
 Auth::routes();
 

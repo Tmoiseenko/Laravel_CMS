@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Mail\PostCreated;
 use App\Mail\PostDeleted;
 use App\Mail\PostUpdated;
+use App\Rules\PostContent;
+use App\Rules\PostCreateSlug;
+use App\Rules\PostExcerpt;
+use App\Rules\PostTitle;
+use App\Rules\PostUpdateSlug;
 use App\Tag;
 use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 
 class PostsController extends Controller
@@ -41,8 +48,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        $title = 'Создание статьи';
-        return view('posts.create', compact('title'));
+        return view('posts.create');
     }
 
     /**
@@ -53,20 +59,16 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        $request = request();
         $request->merge(array('published' => $request->has('published') ? true : false));
-        $request->validate([
-            'title' => 'required|min:5|max:100',
-            'slug' => [
-                'required',
-                'unique:posts'
-            ],
-            'excerpt' => 'required|max:255',
-            'content' => 'required',
+        $request = request()->validate([
+            'title' => new PostTitle(),
+            'slug' => new PostCreateSlug(),
+            'excerpt' => new PostExcerpt(),
+            'content' => new PostContent(),
         ]);
         $request['user_id'] = Auth::id();
 
-        $post = Post::create($request->all());
+        $post = Post::create($request);
         flash("Новая статья успешно создана");
         \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostCreated($post));
 
@@ -81,8 +83,7 @@ class PostsController extends Controller
      */
     public function show(Post $post)
     {
-        $title = $post->title;
-        return view('posts.single', compact('post', 'title'));
+        return view('posts.single', compact('post'));
     }
 
     /**
@@ -94,8 +95,7 @@ class PostsController extends Controller
     public function edit(Post $post)
     {
         $this->authorize('update', $post);
-        $title = 'Редактирование статьи';
-        return view('posts.edit', compact('post', 'title'));
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -107,13 +107,11 @@ class PostsController extends Controller
      */
     public function update(Post $post)
     {
-
-
         $attributes = request()->validate([
-            'title' => 'required|min:5|max:100',
-            'slug' => 'required',
-            'excerpt' => 'required|max:255',
-            'content' => 'required',
+            'title' => new PostTitle(),
+            'slug' => new PostUpdateSlug(),
+            'excerpt' => new PostExcerpt(),
+            'content' => new PostContent(),
         ]);
 
         $post->update($attributes);
