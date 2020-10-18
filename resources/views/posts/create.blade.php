@@ -5,15 +5,9 @@
         Создание статьи
     </h3>
     @include('layout.errors')
-    <form method="post" action="{{ route('post.create') }}">
+    <form method="post" action="{{ route('post.store') }}">
         @csrf
         @include('posts.createEditField')
-        <div class="form-group">
-            <label for="InputTag">Теги</label>
-            <input type="text" class="form-control @error('excerpt') is-invalid @enderror"
-                   id="InputTag" name="tags"
-                   value="{{ old('tags') }}">
-        </div>
         <button type="submit" class="btn btn-primary">Отправить</button>
     </form>
 @endsection

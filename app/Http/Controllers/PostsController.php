@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\PostRequest;
 use App\Mail\PostCreated;
 use App\Mail\PostDeleted;
 use App\Mail\PostUpdated;
@@ -17,6 +18,7 @@ use App\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
+use PhpParser\Node\Expr\New_;
 
 
 class PostsController extends Controller
@@ -48,7 +50,8 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $post = new Post();
+        return view('posts.create', compact('post'));
     }
 
     /**
@@ -57,18 +60,24 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $request->merge(array('published' => $request->has('published') ? true : false));
-        $request = request()->validate([
-            'title' => new PostTitle(),
-            'slug' => new PostCreateSlug(),
-            'excerpt' => new PostExcerpt(),
-            'content' => new PostContent(),
-        ]);
-        $request['user_id'] = Auth::id();
+        $attributes = $request->validated();
+        $attributes['user_id'] = Auth::id();
+        $post = Post::create($attributes);
 
-        $post = Post::create($request);
+        $postTags = $post->tags->keyBy('name');
+        $tags = collect(explode(',', request('tags')))->keyBy(function ($item) { return $item; } );
+        $syncIds = $postTags->intersectByKeys($tags)->pluck('id')->toArray();
+        $postToAttach = $tags->diffKeys($postTags);
+
+        foreach ($postToAttach as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $syncIds[] = $tag->id;
+        }
+
+        $post->tags()->sync($syncIds);
+
         flash("Новая статья успешно создана");
         \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostCreated($post));
 
@@ -105,16 +114,9 @@ class PostsController extends Controller
      * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Post $post)
+    public function update(PostRequest $request, Post $post)
     {
-        $attributes = request()->validate([
-            'title' => new PostTitle(),
-            'slug' => new PostUpdateSlug(),
-            'excerpt' => new PostExcerpt(),
-            'content' => new PostContent(),
-        ]);
-
-        $post->update($attributes);
+        $post->update($request->validated());
 
         $postTags = $post->tags->keyBy('name');
         $tags = collect(explode(',', request('tags')))->keyBy(function ($item) { return $item; } );
