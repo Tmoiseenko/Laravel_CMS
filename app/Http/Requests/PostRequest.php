@@ -35,7 +35,7 @@ class PostRequest extends FormRequest
 
         if($this->isMethod('patch')){
             $post = Post::where('slug', $this->slug)->first();
-            $rule['slug'] = $post ? true : ['required', 'unique:posts'];
+            $rule['slug'] = $post ? ['required'] : ['required', 'unique:posts'];
         }
 
         return $rule;

@@ -66,17 +66,8 @@ class PostsController extends Controller
         $attributes['user_id'] = Auth::id();
         $post = Post::create($attributes);
 
-        $postTags = $post->tags->keyBy('name');
-        $tags = collect(explode(',', request('tags')))->keyBy(function ($item) { return $item; } );
-        $syncIds = $postTags->intersectByKeys($tags)->pluck('id')->toArray();
-        $postToAttach = $tags->diffKeys($postTags);
-
-        foreach ($postToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $syncIds[] = $tag->id;
-        }
-
-        $post->tags()->sync($syncIds);
+        $tagsSync = app()->make('App\Http\Controllers\PostTagsSyncController');
+        $tagsSync->sync($post);
 
         flash("Новая статья успешно создана");
         \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostCreated($post));
@@ -118,17 +109,9 @@ class PostsController extends Controller
     {
         $post->update($request->validated());
 
-        $postTags = $post->tags->keyBy('name');
-        $tags = collect(explode(',', request('tags')))->keyBy(function ($item) { return $item; } );
-        $syncIds = $postTags->intersectByKeys($tags)->pluck('id')->toArray();
-        $postToAttach = $tags->diffKeys($postTags);
+        $tagsSync = app()->make('App\Http\Controllers\PostTagsSyncController');
+        $tagsSync->sync($post);
 
-        foreach ($postToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $syncIds[] = $tag->id;
-        }
-
-        $post->tags()->sync($syncIds);
         flash("Статья успешно обновлена");
         \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostUpdated($post));
         return redirect('/');
