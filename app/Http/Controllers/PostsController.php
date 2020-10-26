@@ -60,14 +60,13 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store(PostRequest $request, PostTagsSyncController $tagsSync)
     {
         $attributes = $request->validated();
         $attributes['user_id'] = Auth::id();
         $post = Post::create($attributes);
 
-        $tagsSync = app()->make('App\Http\Controllers\PostTagsSyncController');
-        $tagsSync->sync($post);
+        $tagsSync->sync($post, request('tags'));
 
         flash("Новая статья успешно создана");
         \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostCreated($post));
@@ -105,12 +104,10 @@ class PostsController extends Controller
      * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, Post $post)
+    public function update(PostRequest $request, Post $post, PostTagsSyncController $tagsSync)
     {
         $post->update($request->validated());
-
-        $tagsSync = app()->make('App\Http\Controllers\PostTagsSyncController');
-        $tagsSync->sync($post);
+        $tagsSync->sync($post, request('tags'));
 
         flash("Статья успешно обновлена");
         \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostUpdated($post));

@@ -6,12 +6,12 @@ use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
 
-class PostTagsSyncController extends Controller
+class PostTagsSyncController
 {
-    public function sync(Post $post)
+    public function sync(Post $post, $requestTags)
     {
         $postTags = $post->tags->keyBy('name');
-        $tags = collect(explode(',', request('tags')))->keyBy(function ($item) { return $item; } );
+        $tags = collect(explode(',', $requestTags))->keyBy(function ($item) { return $item; } );
         $syncIds = $postTags->intersectByKeys($tags)->pluck('id')->toArray();
         $postToAttach = $tags->diffKeys($postTags);
 
