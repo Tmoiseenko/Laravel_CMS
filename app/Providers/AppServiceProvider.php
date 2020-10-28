@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('tagsCloud', \App\Tag::tagsCloud());
         });
 
-        $this->app->bind('HelpSpot\API', function ($app) {
+        $this->app->bind(PostTagsSyncController::class, function ($app) {
             return new PostTagsSyncController();
         });
     }
