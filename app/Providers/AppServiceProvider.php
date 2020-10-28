@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\PostTagsSyncController;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        view()->composer('layout.sidebar', function (View $view) {
+            $view->with('tagsCloud', \App\Tag::tagsCloud());
+        });
+
+        $this->app->bind(PostTagsSyncController::class, function ($app) {
+            return new PostTagsSyncController();
+        });
     }
 
     /**

@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.1/assets/img/favicons/favicon.ico">
 
-    <title>{{$title}}</title>
+    <title>{{ config('app.name') }}</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.1/examples/blog/">
 
@@ -22,9 +22,12 @@
 
 <body>
 
-@include('layout.nav')
-
 <main role="main" class="container">
+
+    @include('layout.nav')
+
+    @include('layout.message')
+
     <div class="row">
         <div class="col-md-8 blog-main">
 
@@ -32,7 +35,9 @@
 
         </div><!-- /.blog-main -->
 
-        @include('layout.sidebar')
+        @section('sidebar')
+            @include('layout.sidebar')
+        @show
 
     </div><!-- /.row -->
 

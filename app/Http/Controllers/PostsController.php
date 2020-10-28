@@ -2,48 +2,131 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
+
+use App\Http\Requests\PostRequest;
+use App\Mail\PostCreated;
+use App\Mail\PostDeleted;
+use App\Mail\PostUpdated;
+use App\Rules\PostContent;
+use App\Rules\PostCreateSlug;
+use App\Rules\PostExcerpt;
+use App\Rules\PostTitle;
+use App\Rules\PostUpdateSlug;
+use App\Tag;
 use Illuminate\Http\Request;
+use App\Post;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
+use PhpParser\Node\Expr\New_;
+
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $posts = Post::published()->latest()->get();
-        $title = 'Блог Laravel-Skillbox';
+        if (Auth::check()) {
+            $posts = \auth()->user()->posts()->published()->latest()->get();
+        } else {
+            $posts = Post::published()->latest()->get();
+        }
 
-        return view('posts.index', compact('posts', 'title'));
+        return view('posts.index', compact('posts'));
     }
 
-    public function single(Post $post)
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
-        $title = $post->title;
-        return view('posts.single', compact('post', 'title'));
+        $post = new Post();
+        return view('posts.create', compact('post'));
     }
 
-    public function createGet()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(PostRequest $request, PostTagsSyncController $tagsSync)
     {
-        $title = 'Создание статьи';
-        return view('posts.create', compact('title'));
+        $attributes = $request->validated();
+        $attributes['user_id'] = Auth::id();
+        $post = Post::create($attributes);
+
+        $tagsSync->sync($post, request('tags'));
+
+        flash("Новая статья успешно создана");
+        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostCreated($post));
+
+        return redirect('/');
     }
 
-    public function createPost()
+    /**
+     * Display the specified resource.
+     *
+     * @param  Post $post
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Post $post)
     {
-        $request = request();
+        return view('posts.single', compact('post'));
+    }
 
-        $this->validate($request, [
-            'title' => 'required|min:5|max:100',
-            'slug' => [
-                'required',
-                'unique:posts'
-            ],
-            'excerpt' => 'required|max:255',
-            'content' => 'required',
-        ]);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  Post $post
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Post $post)
+    {
+        $this->authorize('update', $post);
+        return view('posts.edit', compact('post'));
+    }
 
-        $request->merge(array('published' => $request->has('published') ? true : false));
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Post $post
+     * @return \Illuminate\Http\Response
+     */
+    public function update(PostRequest $request, Post $post, PostTagsSyncController $tagsSync)
+    {
+        $post->update($request->validated());
+        $tagsSync->sync($post, request('tags'));
 
-        Post::create($request->all());
+        flash("Статья успешно обновлена");
+        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostUpdated($post));
+        return redirect('/');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  Post $post
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Post $post)
+    {
+        $this->authorize('delete', $post);
+        $deletedPost = $post;
+        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostDeleted($deletedPost));
+        $post->delete();
+        flash("Статья удалена", 'warning');
 
         return redirect('/');
     }
