@@ -15,16 +15,26 @@ use Illuminate\Support\Facades\Route;
 
 // posts
 Route::get('/', 'PostsController@index')->name('home');
-Route::get('/post/tag/{tag}', 'TagsController@index')->name('tag.show');
-Route::resource('/post', 'PostsController');
+Route::get('post/tag/{tag}', 'TagsController@index')->name('tag.show');
+Route::resource('post', 'PostsController');
 
 //pages
-Route::get('/about', 'PagesController@about')->name('about');
-Route::get('/contact', 'PagesController@contact')->name('contact');
+Route::get('about', 'PagesController@about')->name('about');
+Route::get('contact', 'PagesController@contact')->name('contact');
 
 //feedback
-Route::get('/admin/feedback', 'FeedbackController@feedback')->name('feedback.show');
-Route::post('/admin/feedback', 'FeedbackController@feedbackCreate')->name('feedback.create');
+Route::get('admin/feedback', 'FeedbackController@feedback')->name('feedback.show');
+Route::post('admin/feedback', 'FeedbackController@feedbackCreate')->name('feedback.create');
+
+
+Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'],function () {
+        Route::get('/', 'Admin\AdminController@index')->name('admin.index');
+        Route::patch('post/{post}', 'Admin\AdminController@edit')->name('admin.post.update');
+        Route::post('post/{post}/edit', 'Admin\AdminController@index')->name('admin.post.edit');
+        Route::delete('post/{post}/edit', 'Admin\AdminController@index')->name('admin.post.destroy');
+});
+
+
 
 Auth::routes();
 

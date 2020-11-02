@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PostTagsSyncController::class, function ($app) {
             return new PostTagsSyncController();
         });
+
     }
 
     /**

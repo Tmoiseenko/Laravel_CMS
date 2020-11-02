@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -41,4 +42,31 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    /**
+     * @return mixed
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,'users_roles');
+    }
+
+    /**
+     * @param mixed ...$roles
+     * @return bool
+     */
+    public function hasRole(... $roles ) {
+        foreach ($roles as $role) {
+            if ($this->roles->contains('slug', $role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function scopeTakeRandom($query, $size=1)
+    {
+        return $query->orderBy(DB::raw('RAND()'))->take($size);
+    }
+
 }

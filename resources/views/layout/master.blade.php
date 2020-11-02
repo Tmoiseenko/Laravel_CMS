@@ -24,7 +24,9 @@
 
 <main role="main" class="container">
 
-    @include('layout.nav')
+    @section('nav')
+        @include('layout.nav')
+    @show
 
     @include('layout.message')
 
