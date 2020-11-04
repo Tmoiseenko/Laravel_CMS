@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table mt-4">
     <thead class="thead-dark">
     <tr>
         <th scope="col">#</th>
@@ -24,10 +24,14 @@
             @endif
         </td>
         <td>
-            <a href="{{ route('post.update', $post->id) }}">Изменить</a>
+            <a href="{{ route('admin.post.edit', $post->slug) }}" class="btn btn-outline-info">Изменить</a>
         </td>
         <td>
-            <a href="{{ route('post.destroy', $post->id) }}">Удалить</a>
+            <form method="post" action="{{ route('admin.post.destroy', $post->slug) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-outline-danger">Удалить</button>
+            </form>
         </td>
         <td>
             @include('posts.tags', ['tags' => $post->tags])

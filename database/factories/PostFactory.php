@@ -6,10 +6,10 @@ use Illuminate\Support\Str;
 $factory->define(\App\Post::class, function (Faker $faker) {
     $faker = \Faker\Factory::create('zh_CN');
     return [
-        'title' => $faker->realText(10),
+        'title' => $faker->sentence(5),
         'slug' => Str::slug($faker->sentence(2), '-'),
-        'excerpt' => $faker->realText(50),
-        'content' => $faker->realText(),
+        'excerpt' => $faker->sentence(10),
+        'content' => $faker->paragraph(rand(10, 30), ),
         'published' => rand(0, 1),
     ];
 });

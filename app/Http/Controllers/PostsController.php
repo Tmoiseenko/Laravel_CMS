@@ -34,7 +34,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
+        if (Auth::check() && !\auth()->user()->hasRole('admin')) {
             $posts = \auth()->user()->posts()->published()->latest()->get();
         } else {
             $posts = Post::published()->latest()->get();

@@ -10,7 +10,6 @@
         @method('PATCH')
         @include('posts.createEditField')
 
-
         <button type="submit" class="btn btn-primary">Изменить</button>
     </form>
 

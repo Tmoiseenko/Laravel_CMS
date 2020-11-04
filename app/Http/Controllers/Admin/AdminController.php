@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PostTagsSyncController;
+use App\Http\Requests\PostRequest;
+use App\Mail\PostDeleted;
+use App\Mail\PostUpdated;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,57 +20,15 @@ class AdminController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $post = new Post();
-        return view('posts.create', compact('post'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(PostRequest $request, PostTagsSyncController $tagsSync)
-    {
-        $attributes = $request->validated();
-        $attributes['user_id'] = Auth::id();
-        $post = Post::create($attributes);
-
-        $tagsSync->sync($post, request('tags'));
-
-        flash("Новая статья успешно создана");
-        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostCreated($post));
-
-        return redirect('/');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  Post $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        return view('posts.single', compact('post'));
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
-     * @param  Post $post
+     * @param Post $post
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(Post $post)
     {
-        $this->authorize('update', $post);
-        return view('posts.edit', compact('post'));
+        return view('admin.editPost', compact('post'));
     }
 
     /**
@@ -83,6 +45,25 @@ class AdminController extends Controller
 
         flash("Статья успешно обновлена");
         \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostUpdated($post));
-        return redirect('/');
+        return redirect()->route('admin.index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Post $post
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(Post $post)
+    {
+        dd($post);
+        $this->authorize('delete', $post);
+        $deletedPost = $post;
+        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostDeleted($deletedPost));
+        $post->delete();
+        flash("Статья удалена", 'warning');
+
+        return redirect()->route('admin.index');
     }
 }

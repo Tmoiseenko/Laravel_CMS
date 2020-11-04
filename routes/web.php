@@ -26,12 +26,13 @@ Route::get('contact', 'PagesController@contact')->name('contact');
 Route::get('admin/feedback', 'FeedbackController@feedback')->name('feedback.show');
 Route::post('admin/feedback', 'FeedbackController@feedbackCreate')->name('feedback.create');
 
-
+//Admin
 Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'],function () {
         Route::get('/', 'Admin\AdminController@index')->name('admin.index');
-        Route::patch('post/{post}', 'Admin\AdminController@edit')->name('admin.post.update');
-        Route::post('post/{post}/edit', 'Admin\AdminController@index')->name('admin.post.edit');
-        Route::delete('post/{post}/edit', 'Admin\AdminController@index')->name('admin.post.destroy');
+        Route::get('/art', 'Admin\AdminController@edit')->name('admin.art');
+        Route::get('post/{post}/edit', 'Admin\AdminController@edit')->name('admin.post.edit');
+        Route::patch('post/{post}', 'Admin\AdminController@update')->name('admin.post.update');
+        Route::delete('post/{post}', 'Admin\AdminController@destroy')->name('admin.post.destroy');
 });
 
 
