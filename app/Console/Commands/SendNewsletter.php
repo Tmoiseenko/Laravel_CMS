@@ -57,3 +57,4 @@ class SendNewsletter extends Command
 
     }
 }
+

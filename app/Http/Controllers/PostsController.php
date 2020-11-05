@@ -7,12 +7,8 @@ use App\Http\Requests\PostRequest;
 use App\Mail\PostCreated;
 use App\Mail\PostDeleted;
 use App\Mail\PostUpdated;
-use App\Rules\PostContent;
-use App\Rules\PostCreateSlug;
-use App\Rules\PostExcerpt;
-use App\Rules\PostTitle;
-use App\Rules\PostUpdateSlug;
 use App\Tag;
+use App\WeatherMapApi;
 use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +35,6 @@ class PostsController extends Controller
         } else {
             $posts = Post::published()->latest()->get();
         }
-
         return view('posts.index', compact('posts'));
     }
 
