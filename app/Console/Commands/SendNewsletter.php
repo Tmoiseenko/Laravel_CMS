@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Notifications\SendNewsletterNotification;
 use App\Post;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Notification;
@@ -42,13 +43,14 @@ class SendNewsletter extends Command
      */
     public function handle()
     {
-        $dateFrom = date('Y-m-d', strtotime("-1 week"));
-        $dateTo = date('Y-m-d');
+        $dateFrom = new Carbon();
+        $dateTo = new Carbon();
+        $dateTo->subWeek(-1);
         if ($this->option('from')) {
-            $dateFrom = date($this->option('from'));
+            $dateFrom =  Carbon::create($this->option('from'));
         }
         if ($this->option('to')) {
-            $dateTo = date($this->option('to'));
+            $dateTo = Carbon::create($this->option('to'));
         }
         $users = User::all();
         $posts = Post::whereBetween('created_at', [$dateFrom, $dateTo])->get();

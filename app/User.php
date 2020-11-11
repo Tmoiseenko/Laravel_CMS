@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function scopeTakeRandom($query, $size=1)
     {
-        return $query->orderBy(DB::raw('RAND()'))->take($size);
+        return $query->inRandomOrder()->take($size);
     }
 
 }

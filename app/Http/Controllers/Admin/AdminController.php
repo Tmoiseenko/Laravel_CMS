@@ -44,7 +44,7 @@ class AdminController extends Controller
         $tagsSync->sync($post, request('tags'));
 
         flash("Статья успешно обновлена");
-        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostUpdated($post));
+        \Mail::to(config('mail.admin_email'))->queue(new PostUpdated($post));
         return redirect()->route('admin.index');
     }
 
@@ -57,10 +57,9 @@ class AdminController extends Controller
      */
     public function destroy(Post $post)
     {
-        dd($post);
         $this->authorize('delete', $post);
         $deletedPost = $post;
-        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostDeleted($deletedPost));
+        \Mail::to(config('mail.admin_email'))->queue(new PostDeleted($deletedPost));
         $post->delete();
         flash("Статья удалена", 'warning');
 

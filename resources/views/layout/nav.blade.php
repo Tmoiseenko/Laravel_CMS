@@ -39,7 +39,10 @@
             <a class="p-2 text-muted" href="{{ route('contact') }}">Контакты</a>
             <a class="p-2 text-muted" href="{{ route('feedback.show') }}">Обращения</a>
             <a class="p-2 text-muted" href="{{ route('post.create') }}">Создать статью</a>
-            <a class="p-2 text-muted" href="{{ route('admin.index') }}">Админ. раздел</a>
+            @role('admin')
+                <a class="p-2 text-muted" href="{{ route('admin.index') }}">Админ. раздел</a>
+            @endrole
+
         </nav>
     </div>
 </div>

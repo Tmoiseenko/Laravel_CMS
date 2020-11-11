@@ -11,5 +11,6 @@ $factory->define(\App\Post::class, function (Faker $faker) {
         'excerpt' => $faker->sentence(10),
         'content' => $faker->paragraph(rand(10, 30), ),
         'published' => rand(0, 1),
+        'user_id' => factory(\App\User::class)->create(),
     ];
 });
