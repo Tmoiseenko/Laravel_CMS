@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Controllers\PostTagsSyncController;
+use App\Services\WeatherMapApi;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
@@ -21,12 +22,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         view()->composer('layout.sidebar', function (View $view) {
-            $view->with('weatherData', \App\WeatherMapApi::getWeather(
-                                            config('skillbox.ipfy'),
-                                            config('skillbox.geoip'),
-                                            config('skillbox.yandex_whether.url'),
-                                            config('skillbox.yandex_whether.api_key')
-                                        )
+            $view->with('weatherData', app(WeatherMapApiServiceProvider::class)->getWeather()
             );
         });
 
