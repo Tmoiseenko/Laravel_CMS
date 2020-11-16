@@ -7,12 +7,9 @@ use App\Http\Requests\PostRequest;
 use App\Mail\PostCreated;
 use App\Mail\PostDeleted;
 use App\Mail\PostUpdated;
-use App\Rules\PostContent;
-use App\Rules\PostCreateSlug;
-use App\Rules\PostExcerpt;
-use App\Rules\PostTitle;
-use App\Rules\PostUpdateSlug;
+use App\PostTagsSync;
 use App\Tag;
+use App\WeatherMapApi;
 use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Support\Facades\Auth;
@@ -34,12 +31,11 @@ class PostsController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
+        if (Auth::check() && !\auth()->user()->hasRole('admin')) {
             $posts = \auth()->user()->posts()->published()->latest()->get();
         } else {
             $posts = Post::published()->latest()->get();
         }
-
         return view('posts.index', compact('posts'));
     }
 
@@ -60,7 +56,7 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request, PostTagsSyncController $tagsSync)
+    public function store(PostRequest $request, PostTagsSync $tagsSync)
     {
         $attributes = $request->validated();
         $attributes['user_id'] = Auth::id();
@@ -69,7 +65,7 @@ class PostsController extends Controller
         $tagsSync->sync($post, request('tags'));
 
         flash("Новая статья успешно создана");
-        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostCreated($post));
+        \Mail::to(config('mail.admin_email'))->queue(new PostCreated($post));
 
         return redirect('/');
     }
@@ -104,13 +100,13 @@ class PostsController extends Controller
      * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, Post $post, PostTagsSyncController $tagsSync)
+    public function update(PostRequest $request, Post $post, PostTagsSync $tagsSync)
     {
         $post->update($request->validated());
         $tagsSync->sync($post, request('tags'));
 
         flash("Статья успешно обновлена");
-        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostUpdated($post));
+        \Mail::to(config('mail.admin_email'))->queue(new PostUpdated($post));
         return redirect('/');
     }
 
@@ -124,7 +120,7 @@ class PostsController extends Controller
     {
         $this->authorize('delete', $post);
         $deletedPost = $post;
-        \Mail::to('tmoiseenko@laravel.skillbox')->queue(new PostDeleted($deletedPost));
+        \Mail::to(config('mail.admin_email'))->queue(new PostDeleted($deletedPost));
         $post->delete();
         flash("Статья удалена", 'warning');
 

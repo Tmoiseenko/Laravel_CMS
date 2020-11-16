@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\PostTagsSyncController;
+use App\Http\Controllers\PostTagsSync;
+use App\Services\WeatherMapApi;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
 
@@ -19,9 +22,14 @@ class AppServiceProvider extends ServiceProvider
             $view->with('tagsCloud', \App\Tag::tagsCloud());
         });
 
-        $this->app->bind(PostTagsSyncController::class, function ($app) {
-            return new PostTagsSyncController();
+        view()->composer('layout.sidebar', function (View $view, WeatherMapApi $weatherMapApi) {
+            $view->with('weatherData', $weatherMapApi->getWeather());
         });
+
+        $this->app->bind(PostTagsSync::class, function ($app) {
+            return new PostTagsSync();
+        });
+
     }
 
     /**

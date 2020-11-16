@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App;
 
 use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
 
-class PostTagsSyncController
+class PostTagsSync
 {
     public function sync(Post $post, $requestTags)
     {
