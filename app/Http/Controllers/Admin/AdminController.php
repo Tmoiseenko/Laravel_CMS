@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\PostTagsSyncController;
 use App\Http\Requests\PostRequest;
 use App\Mail\PostDeleted;
 use App\Mail\PostUpdated;
 use App\Post;
+use App\PostTagsSync;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,7 +38,7 @@ class AdminController extends Controller
      * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, Post $post, PostTagsSyncController $tagsSync)
+    public function update(PostRequest $request, Post $post, PostTagsSync $tagsSync)
     {
         $post->update($request->validated());
         $tagsSync->sync($post, request('tags'));

@@ -7,6 +7,7 @@ use App\Http\Requests\PostRequest;
 use App\Mail\PostCreated;
 use App\Mail\PostDeleted;
 use App\Mail\PostUpdated;
+use App\PostTagsSync;
 use App\Tag;
 use App\WeatherMapApi;
 use Illuminate\Http\Request;
@@ -55,7 +56,7 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request, PostTagsSyncController $tagsSync)
+    public function store(PostRequest $request, PostTagsSync $tagsSync)
     {
         $attributes = $request->validated();
         $attributes['user_id'] = Auth::id();
@@ -99,7 +100,7 @@ class PostsController extends Controller
      * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, Post $post, PostTagsSyncController $tagsSync)
+    public function update(PostRequest $request, Post $post, PostTagsSync $tagsSync)
     {
         $post->update($request->validated());
         $tagsSync->sync($post, request('tags'));
