@@ -22,8 +22,8 @@ class AppServiceProvider extends ServiceProvider
             $view->with('tagsCloud', \App\Tag::tagsCloud());
         });
 
-        view()->composer('layout.sidebar', function (View $view, WeatherMapApi $weatherMapApi) {
-            $view->with('weatherData', $weatherMapApi->getWeather());
+        view()->composer('layout.sidebar', function (View $view) {
+            $view->with('weatherData', App::make('WeatherMapApi')->getWeather());
         });
 
         $this->app->bind(PostTagsSync::class, function ($app) {

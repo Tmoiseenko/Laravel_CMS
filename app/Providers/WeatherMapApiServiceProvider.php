@@ -24,7 +24,7 @@ class WeatherMapApiServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(WeatherMapApi::class, function () {
+        $this->app->bind('WeatherMapApi', function () {
             return new WeatherMapApi(
                 config('skillbox.ipfy'),
                 config('skillbox.geoip'),

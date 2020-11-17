@@ -3,7 +3,7 @@
 
 {{ $post->excerpt }}
 
-@component('mail::button', ['url' => base_url() . '/post/' . $post->slug])
+@component('mail::button', ['url' => route('home') . '/post/' . $post->slug])
 Посмотреть
 @endcomponent
 

@@ -57,7 +57,6 @@ class AdminController extends Controller
      */
     public function destroy(Post $post)
     {
-        $this->authorize('delete', $post);
         $deletedPost = $post;
         \Mail::to(config('mail.admin_email'))->queue(new PostDeleted($deletedPost));
         $post->delete();
