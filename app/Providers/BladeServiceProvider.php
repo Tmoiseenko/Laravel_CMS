@@ -33,5 +33,6 @@ class RolesServiceProvider extends ServiceProvider
         Blade::directive('endrole', function ($role) {
             return "<?php endif; ?>";
         });
+        
     }
 }
