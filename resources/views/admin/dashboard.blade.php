@@ -1,7 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: tmoiseenko
- * Date: 23.11.2020
- * Time: 20:53
- */
+@extends('admin.master')
+@section('content')
+
+@endsection

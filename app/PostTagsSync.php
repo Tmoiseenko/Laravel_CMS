@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class PostTagsSync
 {
-    public function sync(Post $post, $requestTags)
+    public function sync(Model $post, $requestTags)
     {
         $postTags = $post->tags->keyBy('name');
         $tags = collect(explode(',', $requestTags))->keyBy(function ($item) { return $item; } );

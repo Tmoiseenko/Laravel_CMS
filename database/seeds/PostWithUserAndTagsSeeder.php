@@ -19,6 +19,7 @@ class PostWithUserAndTagsSeeder extends Seeder
             ])->each(function (\App\Post $post) {
                 $tagsIds = Tag::takeRandom(rand(2, 5))->get('id');
                 $post->tags()->sync($tagsIds);
+                $post->comments()->saveMany(factory(\App\Comment::class, rand(3, 5))->make());
             });
             $i++;
         }

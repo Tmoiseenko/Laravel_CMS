@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
-class RolesServiceProvider extends ServiceProvider
+class BladeServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -33,6 +33,8 @@ class RolesServiceProvider extends ServiceProvider
         Blade::directive('endrole', function ($role) {
             return "<?php endif; ?>";
         });
-        
+        Blade::directive('linkactive', function ($route) {
+            return "<?php echo request()->routeIs($route) ? 'active disabled' : null; ?>";
+        });
     }
 }
