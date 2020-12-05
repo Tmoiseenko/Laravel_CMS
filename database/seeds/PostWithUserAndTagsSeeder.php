@@ -14,12 +14,12 @@ class PostWithUserAndTagsSeeder extends Seeder
     {
         $i = 0;
         while (5 > $i ) {
-            factory(\App\Post::class, 5)->create([
+            factory(\App\Post::class, rand(1, 35))->create([
                 'user_id' => \App\User::takeRandom()->first()
             ])->each(function (\App\Post $post) {
                 $tagsIds = Tag::takeRandom(rand(2, 5))->get('id');
                 $post->tags()->sync($tagsIds);
-                $post->comments()->saveMany(factory(\App\Comment::class, rand(3, 5))->make());
+                $post->comments()->saveMany(factory(\App\Comment::class, rand(3, 15))->make());
             });
             $i++;
         }

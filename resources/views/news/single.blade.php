@@ -18,4 +18,6 @@
 
     <p><a href="/">На главную</a></p>
 
+    @include('layout.comments', ['comments' => $news->comments, 'postId' => $news->id, 'postType' => get_class($news)])
+
 @endsection

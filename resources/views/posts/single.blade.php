@@ -18,17 +18,6 @@
 
     <p><a href="/">На главную</a></p>
 
-    {{--@include('layout.comments', ['comments' => $comments])--}}
-    <hr>
-    <h3>Кооментарии</h3>
-    @foreach($post->comments as $comment)
-    <div class="media m-2 p-2 border bottom-radius border-info">
-            <div class="media-body">
-                <h5 class="mt-0">{{ $comment->name }}</h5>
-                <h6 class="mt-0">{{ $comment->email }}</h6>
-                <p>{{ $comment->message }}</p>
-            </div>
-    </div>
-    @endforeach
+    @include('layout.comments', ['comments' => $post->comments, 'postId' => $post->id, 'postType' => get_class($post)])
 
 @endsection
