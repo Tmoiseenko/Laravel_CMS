@@ -29,7 +29,8 @@ Route::get('contact', 'PagesController@contact')->name('contact');
 Route::get('admin/feedback', 'FeedbackController@feedback')->name('feedback.show');
 Route::post('admin/feedback', 'FeedbackController@feedbackCreate')->name('feedback.create');
 
-Route::post('/comment', 'CommentsController@store')->name('comment.create');
+Route::post('/comment/news', 'CommentsController@storeNews')->name('news.comment.create');
+Route::post('/comment/post', 'CommentsController@storePost')->name('post.comment.create');
 
 //Admin
 Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'],function () {

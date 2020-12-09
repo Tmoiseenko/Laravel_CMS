@@ -1,7 +1,6 @@
-<form action="{{ route('comment.create') }}" method="post">
+<form action="{{ $action }}" method="post">
     @csrf
     <input type="hidden" name="postId" value="{{ $postId }}">
-    <input type="hidden" name="postType" value="{{ $postType }}">
     <div class="form-group">
         <label for="name">Ваше имя</label>
         <input type="text" class="form-control"

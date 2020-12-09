@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             TagSeeder::class,
-//            CommentSeeder::class,
             PostWithUserAndTagsSeeder::class,
             NewsSeeder::class,
             ]);

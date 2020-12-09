@@ -14,59 +14,39 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
-        $news = News::all();
-        $comments = Comment::all();
-        $users = User::all();
-        $maxComentablePost = DB::table('comments')
-            ->select(DB::raw('commentable_id, count(*) as cnt'))
-            ->where('commentable_type', 'like', '%Post')
-            ->groupBy('commentable_id')
-            ->orderBy('cnt', 'desc')
-            ->limit(1)
+        $postsCount = Post::count();
+        $newsCount = News::count();
+        $commentsCount = Comment::count();
+        $usersCount = User::count();
+        $mostPopularPost = Post::withCount('comments')
+            ->orderBy('comments_count', 'desc')
             ->first();
-        $mostPopularPost = DB::table('posts')->find($maxComentablePost->commentable_id);
-        $maxCommentCount = $maxComentablePost->cnt;
-        $maxPostUserId = DB::table('posts')
-            ->select(DB::raw('user_id, count(*) as cnt'))
-            ->groupBy('user_id')
-            ->orderBy('cnt', 'desc')
-            ->limit(1)
+        $userWithMaxPost = User::withCount('posts')
+            ->orderBy('posts_count', 'desc')
             ->first();
-        $maxPostCount = $maxPostUserId->cnt;
-        $userWithMaxPost = User::find($maxPostUserId->user_id);
-        $postsWithLength = DB::table('posts')
-            ->select(DB::raw('*, length(content) as length'))
-            ->orderBy('length', 'desc')
-            ->get();
-        $mostFicklePostRaw = DB::table('post_histories')
-            ->select(DB::raw('post_id, count(post_id) as cnt'))
-            ->groupBy('post_id')
+        $postMaxBody = Post::select(DB::raw('*, LENGTH(content) as cnt'))
             ->orderBy('cnt', 'desc')
-            ->limit(1)
             ->first();
-        $mostFicklePost = $mostFicklePostRaw ? Post::find($mostFicklePostRaw->post_id) : null;
-        $avgPostCount = DB::table('posts')
-            ->leftJoin('users', 'users.id', '=', 'posts.user_id')
-            ->select(DB::raw('users.name, avg(posts.id) as cnt'))
-            ->groupBy('user_id')
-            ->having('cnt', '>', 1)
-            ->orderByDesc('cnt')
-            ->get();
-//        dd($avgPostCountRaw);
+        $postMinBody = Post::select(DB::raw('*, LENGTH(content) as cnt'))
+            ->orderBy('cnt', 'asc')
+            ->first();
+
+        $avgUSerPosts = User::withCount('posts')
+            ->orderBy('posts_count', 'desc')
+            ->get()
+            ->where('posts_count', '>', 1)
+            ->avg('posts_count');
+
         return view('admin.dashboard', compact(
-            'posts',
-            'news',
-            'comments',
-            'users',
-            'maxPostCount',
+            'postsCount',
+            'newsCount',
+            'commentsCount',
+            'usersCount',
             'userWithMaxPost',
             'mostPopularPost',
-            'maxCommentCount',
-            'postsWithLength',
-            'mostFicklePostRaw',
-            'mostFicklePost',
-            'avgPostCount'
+            'postMaxBody',
+            'postMinBody',
+            'avgUSerPosts'
         ));
     }
 

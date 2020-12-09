@@ -18,6 +18,6 @@
 
     <p><a href="/">На главную</a></p>
 
-    @include('layout.comments', ['comments' => $post->comments, 'postId' => $post->id, 'postType' => get_class($post)])
+    @include('layout.comments', ['comments' => $post->comments, 'postId' => $post->id, 'action' => route('post.comment.create')])
 
 @endsection

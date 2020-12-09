@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Http\Requests\CommentRequest;
+use App\News;
+use App\Post;
 
 
 class CommentsController extends Controller
@@ -15,13 +17,22 @@ class CommentsController extends Controller
      * @param  \App\Tag  $tag
      * @return \Illuminate\Http\Response
      */
-    public function store(CommentRequest $request)
+    public function storeNews(CommentRequest $request)
     {
-        $class = $request->post('postType');
         $validated = $request->validated();
         $newComment = new Comment($validated);
-        $model = $class::find($request->post('postId'));
-        $model->comments()->save($newComment);
+        $news = News::find($request->post('postId'));
+        $news->comments()->save($newComment);
+
+        return redirect()->back();
+    }
+
+    public function storePost(CommentRequest $request)
+    {
+        $validated = $request->validated();
+        $newComment = new Comment($validated);
+        $post = Post::find($request->post('postId'));
+        $post->comments()->save($newComment);
 
         return redirect()->back();
     }
