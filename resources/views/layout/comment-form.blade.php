@@ -1,6 +1,5 @@
 <form action="{{ $action }}" method="post">
     @csrf
-    <input type="hidden" name="postId" value="{{ $postId }}">
     <div class="form-group">
         <label for="name">Ваше имя</label>
         <input type="text" class="form-control"

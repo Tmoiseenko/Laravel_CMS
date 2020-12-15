@@ -16,8 +16,8 @@
     <p><a href="{{ route('post.edit', $post->slug) }}" class="btn btn-outline-info">Изменить</a></p>
 @endcan
 
-    <p><a href="/">На главную</a></p>
+    <p><a href="{{ route('home') }}">На главную</a></p>
 
-    @include('layout.comments', ['comments' => $post->comments, 'postId' => $post->id, 'action' => route('post.comment.create')])
+    @include('layout.comments', ['comments' => $post->comments, 'action' => route('post.comment.create', $post->id)])
 
 @endsection
