@@ -11,7 +11,12 @@ class Tag extends Model
 
     public function posts()
     {
-        return $this->belongsToMany(Post::class);
+        return $this->morphedByMany(Post::class, 'tagable');
+    }
+
+    public function news()
+    {
+        return $this->morphedByMany(News::class, 'tagable');
     }
 
     public function getRouteKeyName()
@@ -28,4 +33,10 @@ class Tag extends Model
     {
         return $query->orderBy(DB::raw('RAND()'))->take($size);
     }
+
+    public function tagable()
+    {
+        return $this->morphTo();
+    }
+
 }

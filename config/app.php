@@ -106,7 +106,7 @@ return [
     |
     */
 
-    'faker_locale' => 'ru_RU',
+    'faker_locale' => 'en_EN',
 
     /*
     |--------------------------------------------------------------------------
@@ -175,7 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
-        App\Providers\RolesServiceProvider::class,
+        App\Providers\BladeServiceProvider::class,
         App\Providers\WeatherMapApiServiceProvider::class,
 
     ],

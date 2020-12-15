@@ -8,6 +8,7 @@ use App\Mail\PostCreated;
 use App\Mail\PostDeleted;
 use App\Mail\PostUpdated;
 use App\PostTagsSync;
+use App\Comment;
 use App\Tag;
 use App\WeatherMapApi;
 use Illuminate\Http\Request;

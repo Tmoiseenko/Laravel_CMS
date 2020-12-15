@@ -12,8 +12,9 @@
     <div class="divider"></div>
 
     <ul class="nav menu">
-        <li class="active"><a href="index.html"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
-        <li><a href="{{ route('admin.index') }}"><em class="fa fa-calendar">&nbsp;</em> Статьи</a></li>
+        <li class="nav-link @linkactive('admin.index')"><a href="{{ route('admin.index') }}"><em class="fa fa-dashboard"></em> Dashboard</a></li>
+        <li class="nav-link @linkactive('admin.post')"><a href="{{ route('admin.post') }}"><em class="fa fa-calendar"></em> Статьи</a></li>
+        <li class="nav-link @linkactive('admin.news')"><a href="{{ route('admin.news') }}"><em class="fa fa-calendar"></em> Новости</a></li>
         <li>
             <a class="nav-link" href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

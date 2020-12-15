@@ -2,66 +2,52 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Comment;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PostRequest;
-use App\Mail\PostDeleted;
-use App\Mail\PostUpdated;
+use App\News;
 use App\Post;
-use App\PostTagsSync;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\User;
+use Illuminate\Support\Facades\DB;
+
 
 class AdminController extends Controller
 {
     public function index()
     {
-            $posts = Post::all();
-            return view('admin.index', compact('posts'));
+        $postsCount = Post::count();
+        $newsCount = News::count();
+        $commentsCount = Comment::count();
+        $usersCount = User::count();
+        $mostPopularPost = Post::withCount('comments')
+            ->orderBy('comments_count', 'desc')
+            ->first();
+        $userWithMaxPost = User::withCount('posts')
+            ->orderBy('posts_count', 'desc')
+            ->first();
+        $postMaxBody = Post::select(DB::raw('*, LENGTH(content) as cnt'))
+            ->orderBy('cnt', 'desc')
+            ->first();
+        $postMinBody = Post::select(DB::raw('*, LENGTH(content) as cnt'))
+            ->orderBy('cnt', 'asc')
+            ->first();
+
+        $avgUSerPosts = User::withCount('posts')
+            ->orderBy('posts_count', 'desc')
+            ->get()
+            ->where('posts_count', '>', 1)
+            ->avg('posts_count');
+
+        return view('admin.dashboard', compact(
+            'postsCount',
+            'newsCount',
+            'commentsCount',
+            'usersCount',
+            'userWithMaxPost',
+            'mostPopularPost',
+            'postMaxBody',
+            'postMinBody',
+            'avgUSerPosts'
+        ));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Post $post
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function edit(Post $post)
-    {
-        return view('admin.editPost', compact('post'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Post $post
-     * @return \Illuminate\Http\Response
-     */
-    public function update(PostRequest $request, Post $post, PostTagsSync $tagsSync)
-    {
-        $post->update($request->validated());
-        $tagsSync->sync($post, request('tags'));
-
-        flash("Статья успешно обновлена");
-        \Mail::to(config('mail.admin_email'))->queue(new PostUpdated($post));
-        return redirect()->route('admin.index');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Post $post
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function destroy(Post $post)
-    {
-        $deletedPost = $post;
-        \Mail::to(config('mail.admin_email'))->queue(new PostDeleted($deletedPost));
-        $post->delete();
-        flash("Статья удалена", 'warning');
-
-        return redirect()->route('admin.index');
-    }
 }

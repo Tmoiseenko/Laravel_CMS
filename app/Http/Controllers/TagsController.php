@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,13 +17,9 @@ class TagsController extends Controller
      */
     public function index(Tag $tag)
     {
-        if (Auth::check()) {
-            $posts = $tag->posts()->where('user_id', Auth::id())->get();
-        } else {
-            $posts = $tag->posts()->with('tags')->get();
-        }
-
-        return view('posts.index', compact('posts'));
+        $news = $tag->news()->published()->get();
+        $posts = $tag->posts()->published()->get();
+        return view('tags', compact('tag'));
     }
 
 }

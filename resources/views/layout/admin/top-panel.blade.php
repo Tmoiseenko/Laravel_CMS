@@ -6,7 +6,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span></button>
-            <a class="navbar-brand" href="{{ route('home') }}">{{ config('app.name') }}</a>
+            <a class="navbar-brand" href="{{ route('home') }}">{{ config('app.name') }} <span>Blog</span></a>
         </div>
     </div><!-- /.container-fluid -->
 </nav>
