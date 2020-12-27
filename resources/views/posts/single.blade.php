@@ -10,7 +10,7 @@
             @include('posts.tags', ['tags' => $post->tags])
         </span>
     </div>
-    <p>{{ $post->content }}</p>
+    <div>{!! $post->content !!}</div>
 
 @can('update', $post)
     <p><a href="{{ route('post.edit', $post->slug) }}" class="btn btn-outline-info">Изменить</a></p>

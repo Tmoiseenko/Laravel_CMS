@@ -21,7 +21,7 @@
 </div>
 <div class="form-group">
     <label for="InputContent">Напишите статью</label>
-    <textarea class="form-control @error('content') is-invalid @enderror"
+    <textarea id="editor1" class="form-control @error('content') is-invalid @enderror"
               id="InputContent" name="content" rows="10"> {{ old('content', $post->content) }} </textarea>
 </div>
 <div class="form-check mt-3 mb-3">

@@ -12,6 +12,7 @@
     <!--Custom Font-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i"
           rel="stylesheet">
+    <script src="/js/admin/ckeditor/ckeditor.js"></script>
     <!--[if lt IE 9]>
     <script src="{{ asset('/js/admin/html5shiv.js') }}"></script>
     <script src="{{ asset('/js/admin/respond.min.js') }}"></script>
@@ -40,6 +41,10 @@
 
 
 @include('layout.admin.footer')
-
+    <script>
+        // Replace the <textarea id="editor1"> with a CKEditor 4
+        // instance, using default configuration.
+        CKEDITOR.replace( 'editor1' );
+    </script>
 </body>
 </html>
