@@ -7,6 +7,19 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span></button>
             <a class="navbar-brand" href="{{ route('home') }}">{{ config('app.name') }} <span>Blog</span></a>
+            <ul class="nav navbar-top-links navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <em class="fa fa-power-off">&nbsp;</em>
+                            </a>
+                        </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div><!-- /.container-fluid -->
 </nav>
