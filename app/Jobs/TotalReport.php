@@ -16,6 +16,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 //use Maatwebsite\Excel\Excel;
+use Illuminate\Support\Facades\Log;
 use PDF;
 use Excel;
 
@@ -93,10 +94,13 @@ class TotalReport implements ShouldQueue
         }
 
         $mail = new TotalReportSendMail($data);
+        Log::info( $request->input('export') );
 
         if($request->input('export') != 'not_export') {
-            $time = Carbon::now()->format('Y-m-d_H-i');
+
+            $time = Carbon::now()->format('Ymd_Hi');
             $filename = $time . '_TotalReport' . '.' . $request->input('export');
+
             $path = storage_path('app/public/reports/') . $filename;
             $mime = '';
 
@@ -113,7 +117,6 @@ class TotalReport implements ShouldQueue
         }
 
         \Mail::to(config('mail.admin_email'))->queue($mail);
-
 
     }
 }

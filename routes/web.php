@@ -35,7 +35,7 @@ Route::post('news/{news}/comment', 'CommentsController@storePost')->name('post.c
 
 // Reports
 Route::post('/reports/create/{template}', function () {
-    \App\Jobs\TotalReport::dispatchNow();
+    \App\Jobs\TotalReport::dispatch()->onQueue('reports');
 })->name('admin.report.create');
 
 //Admin
