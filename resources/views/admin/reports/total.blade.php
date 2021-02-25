@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="panel panel-default">
+        @include('layout.message')
     <h3 class="panel-heading">Итоговый отчет</h3>
         <form class="panel-body" method="post" action="{{ route('admin.report.create', $template) }}">
             @csrf
@@ -14,7 +15,7 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="commentsCount">Обшее количество Новостей
+                        <input type="checkbox" name="newsCount">Обшее количество Новостей
                     </label>
                 </div>
                 <div class="checkbox">
@@ -24,7 +25,7 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="comments_count">Обшее количество Коментариев
+                        <input type="checkbox" name="commentsCount">Обшее количество Коментариев
                     </label>
                 </div>
                 <div class="checkbox">
