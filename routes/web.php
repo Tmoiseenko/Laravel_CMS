@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,12 @@ Route::post('admin/feedback', 'FeedbackController@feedbackCreate')->name('feedba
 Route::post('posts/{post}/comment', 'CommentsController@storeNews')->name('news.comment.create');
 Route::post('news/{news}/comment', 'CommentsController@storePost')->name('post.comment.create');
 
+// Reports
+//Route::post('/reports/create/{template}', function () {
+//    \App\Jobs\TotalReport::dispatch()->onQueue('reports');
+//})->name('admin.report.create');
+Route::post('/reports/create/{template}', 'Admin\AdminReportsController@createReport')->name('admin.report.create');
+
 //Admin
 Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'],function () {
     Route::get('/', 'Admin\AdminController@index')->name('admin.index');
@@ -45,9 +52,9 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'],function () {
     Route::get('news/{news}/edit', 'Admin\AdminNewsController@edit')->name('admin.news.edit');
     Route::patch('news/{news}', 'Admin\AdminNewsController@update')->name('admin.news.update');
     Route::delete('news/{news}', 'Admin\AdminNewsController@destroy')->name('admin.news.destroy');
+
+    Route::get('/reports/{template}', 'Admin\AdminReportsController@showReport')->name('admin.report.total');
 });
-
-
 
 Auth::routes();
 

@@ -19,14 +19,6 @@
                 </div>
             </div>
             <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-                <div class="panel panel-teal panel-widget border-right">
-                    <div class="row no-padding"><em class="fa fa-xl fa-shopping-cart color-blue"></em>
-                        <div class="large">{{ $newsCount }}</div>
-                        <div class="text-muted">Новостей</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                 <div class="panel panel-blue panel-widget border-right">
                     <div class="row no-padding"><em class="fa fa-xl fa-comments color-orange"></em>
                         <div class="large">{{ $commentsCount }}</div>
@@ -134,28 +126,6 @@
                 </div>
             </div>
             <div class="clear"></div>
-        </div><!--End .article-->
-{{--        <div class="article border-bottom">--}}
-{{--            <div class="col-xs-12">--}}
-{{--                <div class="row">--}}
-{{--                    <div class="col-xs-2 col-md-2 date">--}}
-{{--                        <div class="large">{{ $mostFicklePostRaw->cnt ?? 0 }}</div>--}}
-{{--                        <div class="text-muted">кол-во изменений</div>--}}
-{{--                    </div>--}}
-{{--                    <div class="col-xs-10 col-md-10">--}}
-{{--                        @if($mostFicklePost)--}}
-{{--                            <h4>--}}
-{{--                                <a href="{{ route('admin.post.edit', ['post' => $mostFicklePost->slug]) }}">{{ $mostFicklePost->title }}</a>--}}
-{{--                            </h4>--}}
-{{--                            <p>Самая непостоянная статья</p>--}}
-{{--                        @else--}}
-{{--                            <p>Статьи не изменялись</p>--}}
-{{--                        @endif--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--            <div class="clear"></div>--}}
-{{--        </div><!--End .article-->--}}
     </div>
 
 
