@@ -16,7 +16,7 @@ class AdminReportsController extends Controller
 
     public function createReport(Request $request)
     {
-        if ( count($request->all()) > 2 ) {
+        if (count($request->all()) > 2) {
             TotalReportJob::dispatch($request->all())->onQueue('reports');
             flash('Отчет будет сформирован в фоновом режиме и выслан на почту', 'info');
         } else {
