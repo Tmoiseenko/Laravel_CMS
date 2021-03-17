@@ -34,9 +34,6 @@ Route::post('posts/{post}/comment', 'CommentsController@storeNews')->name('news.
 Route::post('news/{news}/comment', 'CommentsController@storePost')->name('post.comment.create');
 
 // Reports
-//Route::post('/reports/create/{template}', function () {
-//    \App\Jobs\TotalReport::dispatch()->onQueue('reports');
-//})->name('admin.report.create');
 Route::post('/reports/create/{template}', 'Admin\AdminReportsController@createReport')->name('admin.report.create');
 
 //Admin
@@ -54,6 +51,10 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'],function () {
     Route::delete('news/{news}', 'Admin\AdminNewsController@destroy')->name('admin.news.destroy');
 
     Route::get('/reports/{template}', 'Admin\AdminReportsController@showReport')->name('admin.report.total');
+});
+
+Route::get('/test', function () {
+   event(new \App\Events\PostChanged('Настройка успешна'));
 });
 
 Auth::routes();
