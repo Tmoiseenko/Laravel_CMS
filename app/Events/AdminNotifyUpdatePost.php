@@ -10,19 +10,18 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PostChanged implements ShouldBroadcast
+class AdminNotifyUpdatePost implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $what;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($what)
+    public function __construct()
     {
-        $this->what = $what;
+        //
     }
 
     /**
@@ -32,6 +31,6 @@ class PostChanged implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('post-changed');
+        return new PrivateChannel('admin-notify');
     }
 }

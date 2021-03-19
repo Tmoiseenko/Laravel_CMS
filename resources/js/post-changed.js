@@ -1,5 +1,5 @@
 Echo
-    .channel('post-changed')
-    .listen('PostChanged', (e) => {
-        alert(e.what);
+    .private('admin-notify')
+    .listen('.App\\Events\\AdminNotifyUpdatePost', (e) => {
+        alert('Приватный канал успешно работает');
     });

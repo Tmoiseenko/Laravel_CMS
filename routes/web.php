@@ -14,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/test', function () {
+    event(new \App\Events\PostChanged('Настройка успешна'));
+});
+
+Route::get('/privet', function () {
+    var_dump(event(new \App\Events\AdminNotifyUpdatePost()));
+});
+
 // posts
 Route::get('/', 'PostsController@index')->name('home');
 Route::get('tag/{tag}', 'TagsController@index')->name('tag.show');
@@ -53,9 +61,8 @@ Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'],function () {
     Route::get('/reports/{template}', 'Admin\AdminReportsController@showReport')->name('admin.report.total');
 });
 
-Route::get('/test', function () {
-   event(new \App\Events\PostChanged('Настройка успешна'));
-});
+
+
 
 Auth::routes();
 
