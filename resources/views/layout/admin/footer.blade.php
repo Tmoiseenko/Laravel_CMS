@@ -13,4 +13,4 @@
 <script src="{{ asset('/js/admin/easypiechart-data.js') }}"></script>
 <script src="{{ asset('/js/admin/bootstrap-datepicker.js') }}"></script>
 <script src="{{ asset('/js/admin/custom.js') }}"></script>
-
+<script src="{{ mix('js/app.js') }}"></script>

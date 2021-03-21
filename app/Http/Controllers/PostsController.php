@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Events\AdminNotifyUpdatePost;
 use App\Http\Requests\PostRequest;
 use App\Mail\PostCreated;
 use App\Mail\PostDeleted;
@@ -108,6 +109,7 @@ class PostsController extends Controller
 
         flash("Статья успешно обновлена");
         \Mail::to(config('mail.admin_email'))->queue(new PostUpdated($post));
+        event(new AdminNotifyUpdatePost($post));
         return redirect('/');
     }
 

@@ -24,6 +24,6 @@ class AdminNotifyUpdatePost
      */
     public function join(User $user)
     {
-        return true;
+        return $user->hasRole('admin');
     }
 }

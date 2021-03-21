@@ -18,7 +18,7 @@ Route::get('/test', function () {
     event(new \App\Events\PostChanged('Настройка успешна'));
 });
 
-Route::get('/privet', function () {
+Route::get('/private', function () {
     var_dump(event(new \App\Events\AdminNotifyUpdatePost()));
 });
 

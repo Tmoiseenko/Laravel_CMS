@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <meta name="csrf_token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="/docs/4.1/assets/img/favicons/favicon.ico">
 
     <title>{{ config('app.name') }}</title>
@@ -23,8 +23,8 @@
 
 <body>
 
-<main role="main" class="container">
-
+<main role="main" class="container" id="app">
+    <updated-post></updated-post>
     @section('nav')
         @include('layout.nav')
     @show

@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @dd('ok')
     <title>{{ config('app.name') }} - Dashboard</title>
     <link href="/css/admin/bootstrap.min.css" rel="stylesheet">
     <link href="/css/admin/font-awesome.min.css" rel="stylesheet">

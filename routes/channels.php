@@ -17,6 +17,4 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('admin-notify', function () {
-    return true;
-});
+Broadcast::channel('admin-notify', \App\Broadcasting\AdminNotifyUpdatePost::class);
