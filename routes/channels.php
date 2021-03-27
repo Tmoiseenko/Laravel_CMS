@@ -18,3 +18,6 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('admin-notify', \App\Broadcasting\AdminNotifyUpdatePost::class);
+Broadcast::channel('report-admin.{id}', function ($user, $id) {
+    return $user->id === (int) $id && $user->hasRole('admin');
+});
