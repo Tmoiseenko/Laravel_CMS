@@ -21,7 +21,7 @@ class AdminNotifyUpdatePost implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Post $post)
+    public function __construct($post)
     {
         $this->post = $post;
     }

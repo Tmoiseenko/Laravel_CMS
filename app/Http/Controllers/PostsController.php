@@ -109,7 +109,6 @@ class PostsController extends Controller
 
         flash("Статья успешно обновлена");
         \Mail::to(config('mail.admin_email'))->queue(new PostUpdated($post));
-        event(new AdminNotifyUpdatePost($post));
         return redirect('/');
     }
 
