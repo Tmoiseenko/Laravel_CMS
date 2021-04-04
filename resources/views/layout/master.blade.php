@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/docs/4.1/assets/img/favicons/favicon.ico">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('/favicon.ico') }}">
 
     <title>{{ config('app.name') }}</title>
 
@@ -22,8 +23,8 @@
 
 <body>
 
-<main role="main" class="container">
-
+<main role="main" class="container" id="app">
+    <updated-post></updated-post>
     @section('nav')
         @include('layout.nav')
     @show

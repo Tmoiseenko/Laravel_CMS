@@ -4,7 +4,6 @@
         @include('posts.tags', ['tags' => $tagsCloud])
     </div>
 
-
     {{--<div class="p-3 mb-3">--}}
         {{--<h4 class="font-italic">Погода</h4>--}}
             {{--<ul class="list-group">--}}

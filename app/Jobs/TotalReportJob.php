@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Comment;
+use App\Events\AdminReportChannelSend;
 use App\Exports\ExcelExport;
 use App\Mail\TotalReportSendMail;
 use App\News;

@@ -37,4 +37,4 @@
            id="InputTag" name="tags"
            value="{{ old('tags', $post->tags->pluck('name')->implode(',')) }}">
 </div>
-
+@include('layout.admin.ckeditor')

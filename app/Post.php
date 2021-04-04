@@ -2,11 +2,16 @@
 
 namespace App;
 
+use App\Events\AdminNotifyUpdatePost;
 use Illuminate\Support\Arr;
 
 class Post extends Model
 {
     public $fillable = ['title', 'slug', 'excerpt', 'content', 'published', 'user_id'];
+
+//    protected $dispatchesEvents = [
+//        'updates' => AdminNotifyUpdatePost::class
+//    ];
 
     protected static function boot()
     {
@@ -14,6 +19,11 @@ class Post extends Model
 
         static::updating(function (Post $post){
             $after = $post->getDirty();
+            event(new AdminNotifyUpdatePost([
+                'title' => $post->title,
+                'link' => route('post.show', $post->slug),
+                'changes' => $after,
+            ]));
             $post->history()->attach(auth()->id(), [
                 'before' => json_encode(Arr::only($post->fresh()->toArray(), array_keys($after))),
                 'after' => json_encode($after),

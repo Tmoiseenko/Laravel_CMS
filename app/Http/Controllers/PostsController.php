@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Events\AdminNotifyUpdatePost;
 use App\Http\Requests\PostRequest;
 use App\Mail\PostCreated;
 use App\Mail\PostDeleted;
