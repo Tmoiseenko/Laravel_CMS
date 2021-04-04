@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\News;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 
 class NewsController extends Controller
@@ -16,7 +17,8 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $posts = News::published()->latest()->get();
+        $posts = Cache::tags(['news'])->remember('news_list', 3600, fn() => News::published()->latest()->get());
+
         return view('news.index', compact('posts'));
     }
 
@@ -28,6 +30,7 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
+        $news = Cache::tags(['news'])->remember('news|' . $news->id, 3600, fn() =>$news);
         return view('news.single', compact('news'));
     }
 }

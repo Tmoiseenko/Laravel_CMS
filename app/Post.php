@@ -4,6 +4,7 @@ namespace App;
 
 use App\Events\AdminNotifyUpdatePost;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 class Post extends Model
 {
@@ -29,6 +30,10 @@ class Post extends Model
                 'after' => json_encode($after),
             ]);
         });
+
+        static::creating(fn() => Cache::tags(['dashboard', 'adminPosts', 'posts'])->flush());
+        static::updating(fn() => Cache::tags(['dashboard', 'adminPosts', 'posts'])->flush());
+        static::deleting(fn() => Cache::tags(['dashboard', 'adminPosts', 'posts'])->flush());
     }
 
     public function getRouteKeyName()
