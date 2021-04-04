@@ -1,4 +1,9 @@
 @extends('admin.master')
+
+@section('title')
+    АдминПанель: Статьи
+@endsection
+
 @section('content')
     <table class="table mt-4">
         <thead class="thead-dark">

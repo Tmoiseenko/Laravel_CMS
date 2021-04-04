@@ -18,8 +18,8 @@ class TagsController extends Controller
      */
     public function index(Tag $tag)
     {
-        $news = Cache::tags(['tsgs'])->remember('news_tags', 3600, fn() => $tag->news()->published()->get());
-        $posts = Cache::tags(['tsgs'])->remember('posts_tags', 3600, fn() => $tag->posts()->published()->get());
+        $news = Cache::tags(['tags', 'posts'])->remember('news_tags', 3600, fn() => $tag->news()->published()->get());
+        $posts = Cache::tags(['tasgs', 'posts'])->remember('posts_tags', 3600, fn() => $tag->posts()->published()->get());
 
         return view('tags', compact('tag'));
     }

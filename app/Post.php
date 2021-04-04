@@ -10,9 +10,7 @@ class Post extends Model
 {
     public $fillable = ['title', 'slug', 'excerpt', 'content', 'published', 'user_id'];
 
-//    protected $dispatchesEvents = [
-//        'updates' => AdminNotifyUpdatePost::class
-//    ];
+    public $tagsArr = ['posts'];
 
     protected static function boot()
     {
@@ -30,10 +28,6 @@ class Post extends Model
                 'after' => json_encode($after),
             ]);
         });
-
-        static::creating(fn() => Cache::tags(['dashboard', 'adminPosts', 'posts'])->flush());
-        static::updating(fn() => Cache::tags(['dashboard', 'adminPosts', 'posts'])->flush());
-        static::deleting(fn() => Cache::tags(['dashboard', 'adminPosts', 'posts'])->flush());
     }
 
     public function getRouteKeyName()

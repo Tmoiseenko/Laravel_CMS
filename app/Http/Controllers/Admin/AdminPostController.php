@@ -14,7 +14,7 @@ class AdminPostController extends Controller
 {
     public function index()
     {
-        $posts = Cache::tags(['adminPosts'])->remember('adminPostList', 3600, fn() => Post::all());
+        $posts = Cache::tags(['posts'])->remember('adminPostList', 3600, fn() => Post::all());
         return view('admin.posts.index', compact('posts'));
     }
 

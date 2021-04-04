@@ -1,5 +1,9 @@
 @extends('admin.master')
 
+@section('title')
+    Отчеты
+@endsection
+
 @section('content')
     <div class="panel panel-default">
         @include('layout.message')

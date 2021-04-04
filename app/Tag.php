@@ -13,13 +13,11 @@ class Tag extends Model
 
     public $fillable = ['name'];
 
+    public $tagsArr = ['tags'];
+
     protected static function boot()
     {
         parent::boot();
-
-        static::creating(fn() => Cache::tags(['tags'])->flush());
-        static::updating(fn() => Cache::tags(['tags'])->flush());
-        static::deleting(fn() => Cache::tags(['tags'])->flush());
     }
 
     public function posts()

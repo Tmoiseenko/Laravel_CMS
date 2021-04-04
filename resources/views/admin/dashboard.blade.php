@@ -1,4 +1,9 @@
 @extends('admin.master')
+
+@section('title')
+    АдминПанель: Дашборд
+@endsection
+
 @section('content')
     <div class="panel panel-container">
         <div class="row">

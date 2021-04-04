@@ -1,4 +1,9 @@
 @extends('admin.master')
+
+@section('title')
+    Редактирование новости
+@endsection
+
 @section('content')
     <div class="panel panel-default">
         <h3 class="panel-heading">

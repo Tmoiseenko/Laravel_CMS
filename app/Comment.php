@@ -9,6 +9,8 @@ class Comment extends Model
 
     public $fillable = ['name', 'email', 'message'];
 
+    public $tagsArr = ['comments'];
+
     public function commentable()
     {
         return $this->morphTo();

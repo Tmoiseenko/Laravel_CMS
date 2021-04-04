@@ -1,5 +1,9 @@
 @extends('layout.master')
 
+@section('title')
+    Новости
+@endsection
+
 @section('content')
     @foreach($posts as $post)
         <div class="blog-post">

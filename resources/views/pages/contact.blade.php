@@ -1,8 +1,12 @@
 @extends('layout.master')
 
+@section('title')
+    Контакты
+@endsection
+
 @section('content')
     <h3 class="pb-3 mb-4 font-italic border-bottom">
-        {{$title}}
+        Контакты
     </h3>
     <div class="row">
         <div class="col-6">

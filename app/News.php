@@ -8,13 +8,11 @@ class News extends Model
 {
     public $fillable = ['title', 'slug', 'excerpt', 'content', 'published'];
 
+    public $tagsArr = ['news'];
+
     protected static function boot()
     {
         parent::boot();
-
-        static::creating(fn() => Cache::tags(['dashboard', 'adminNews', 'news'])->flush());
-        static::updating(fn() => Cache::tags(['dashboard', 'adminNews', 'news'])->flush());
-        static::deleting(fn() => Cache::tags(['dashboard', 'adminNews', 'news'])->flush());
     }
 
     public function getRouteKeyName()

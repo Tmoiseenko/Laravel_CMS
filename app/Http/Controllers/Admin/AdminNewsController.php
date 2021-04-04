@@ -14,7 +14,7 @@ class AdminNewsController extends Controller
     public function index()
     {
 //        $news = News::all();
-        $news = Cache::tags(['adminNews'])->remember('adminNews', 3600, fn() => News::all());
+        $news = Cache::tags(['news'])->remember('adminNews', 3600, fn() => News::all());
         return view('admin.news.index', compact('news'));
     }
 
