@@ -28,9 +28,13 @@ class NewsController extends Controller
      * @param  News $post
      * @return \Illuminate\Http\Response
      */
-    public function show(News $news)
+    public function show($news)
     {
-        $news = Cache::tags(['news'])->remember('news|' . $news->id, 3600, fn() =>$news);
+        $news = Cache::tags(['news'])->remember(
+                                        'news|' . $news,
+                                        3600,
+                                        fn() => News::where('slug', $news)->first()
+        );
         return view('news.single', compact('news'));
     }
 }

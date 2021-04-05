@@ -34,13 +34,16 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Cache::tags(['posts'])->remember('posts_list', 3600, function () {
-            if (Auth::check() && !\auth()->user()->hasRole('admin')) {
+        if (Auth::check() && \auth()->user()->hasRole('admin')) {
+            $posts = Cache::tags(['posts'])->remember('adminPostsList', 3600, function () {
                 return \auth()->user()->posts()->published()->latest()->get();
-            } else {
+            });
+        } else {
+            $posts = Cache::tags(['posts'])->remember('guesPostsList', 3600, function () {
                 return Post::published()->latest()->get();
-            }
-        });
+            });
+        }
+
 
         return view('posts.index', compact('posts'));
     }
@@ -82,9 +85,12 @@ class PostsController extends Controller
      * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($post)
     {
-        $post = Cache::tags(['posts'])->remember('post|' . $post->id, 3600, fn() => $post);
+        $post = Cache::tags(['posts'])->remember('post|' . $post,
+                                                    3600,
+                                                    fn() => Post::where('slug', $post)->first()
+        );
         return view('posts.single', compact('post'));
     }
 

@@ -27,7 +27,6 @@ class AdminNewsController extends Controller
      */
     public function edit(News $news)
     {
-        $news = Cache::tags(['adminNews'])->remember('adminNews|' . $news->id, 3600, fn() =>$news);
         return view('admin.news.editNews', ['post' => $news]);
     }
 
