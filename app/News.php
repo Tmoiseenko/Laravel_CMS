@@ -15,10 +15,10 @@ class News extends Model
         parent::boot();
     }
 
-//    public function getRouteKeyName()
-//    {
-//        return 'slug';
-//    }
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function scopePublished($query)
     {
