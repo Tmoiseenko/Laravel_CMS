@@ -7,14 +7,14 @@ use App\Http\Requests\PostRequest;
 use App\News;
 use App\NewsTagsSync;
 use App\PostTagsSync;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class AdminNewsController extends Controller
 {
     public function index()
     {
-        $news = News::all();
+//        $news = News::all();
+        $news = Cache::tags(['news'])->remember('adminNews', 3600, fn() => News::all());
         return view('admin.news.index', compact('news'));
     }
 

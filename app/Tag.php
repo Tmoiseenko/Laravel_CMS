@@ -2,12 +2,23 @@
 
 namespace App;
 
+use App\Events\AdminNotifyUpdatePost;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class Tag extends Model
 {
+
     public $fillable = ['name'];
+
+    public $tagsArr = ['tags'];
+
+    protected static function boot()
+    {
+        parent::boot();
+    }
 
     public function posts()
     {

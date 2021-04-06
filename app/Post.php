@@ -4,14 +4,13 @@ namespace App;
 
 use App\Events\AdminNotifyUpdatePost;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 class Post extends Model
 {
     public $fillable = ['title', 'slug', 'excerpt', 'content', 'published', 'user_id'];
 
-//    protected $dispatchesEvents = [
-//        'updates' => AdminNotifyUpdatePost::class
-//    ];
+    public $tagsArr = ['posts'];
 
     protected static function boot()
     {

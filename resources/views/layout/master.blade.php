@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('/favicon.ico') }}">
 
-    <title>{{ config('app.name') }}</title>
+    <title>@yield('title')</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.1/examples/blog/">
 

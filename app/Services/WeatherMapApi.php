@@ -52,7 +52,6 @@ class WeatherMapApi
 
         $result = curl_exec($ch);
         curl_close($ch);
-
         return \GuzzleHttp\json_decode($result);
     }
 }

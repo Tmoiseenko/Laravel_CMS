@@ -1,5 +1,6 @@
 <?php
 
+use App\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -32,8 +33,6 @@ Route::post('admin/feedback', 'FeedbackController@feedbackCreate')->name('feedba
 
 Route::post('posts/{post}/comment', 'CommentsController@storeNews')->name('news.comment.create');
 Route::post('news/{news}/comment', 'CommentsController@storePost')->name('post.comment.create');
-
-
 
 //Admin
 Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'],function () {

@@ -3,34 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PagesController extends Controller
 {
     public function about()
     {
-        $title = 'О нас';
-
-        return view('pages.about', compact('title'));
+        return view('pages.about');
     }
 
     public function contact()
     {
-        $title = 'Контакты';
-
-        return view('pages.contact', compact('title'));
+        return view('pages.contact');
     }
 
     public function feedbacks()
     {
-        $title = 'Список обращений';
-
-        return view('pages.feedbacks', compact('title'));
+        return view('pages.feedbacks');
     }
 
     public function feedbacksCreate()
     {
-        $title = 'Список обращений';
-
-        return view('pages.feedbacks', compact('title'));
+        return view('pages.feedbacks');
     }
 }

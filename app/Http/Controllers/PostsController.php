@@ -15,6 +15,7 @@ use App\WeatherMapApi;
 use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use PhpParser\Node\Expr\New_;
@@ -33,11 +34,17 @@ class PostsController extends Controller
      */
     public function index()
     {
-        if (Auth::check() && !\auth()->user()->hasRole('admin')) {
-            $posts = \auth()->user()->posts()->published()->latest()->get();
+        if (Auth::check() && \auth()->user()->hasRole('admin')) {
+            $posts = Cache::tags(['posts'])->remember('adminPostsList', 3600, function () {
+                return \auth()->user()->posts()->published()->latest()->get();
+            });
         } else {
-            $posts = Post::published()->latest()->get();
+            $posts = Cache::tags(['posts'])->remember('guesPostsList', 3600, function () {
+                return Post::published()->latest()->get();
+            });
         }
+
+
         return view('posts.index', compact('posts'));
     }
 
@@ -78,8 +85,12 @@ class PostsController extends Controller
      * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($post)
     {
+        $post = Cache::tags(['posts'])->remember('post|' . $post,
+                                                    3600,
+                                                    fn() => Post::where('slug', $post)->first()
+        );
         return view('posts.single', compact('post'));
     }
 

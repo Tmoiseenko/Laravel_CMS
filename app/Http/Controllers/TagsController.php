@@ -6,6 +6,7 @@ use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class TagsController extends Controller
 {
@@ -17,8 +18,9 @@ class TagsController extends Controller
      */
     public function index(Tag $tag)
     {
-        $news = $tag->news()->published()->get();
-        $posts = $tag->posts()->published()->get();
+        $news = Cache::tags(['tags', 'posts'])->remember('news_tags', 3600, fn() => $tag->news()->published()->get());
+        $posts = Cache::tags(['tasgs', 'posts'])->remember('posts_tags', 3600, fn() => $tag->posts()->published()->get());
+
         return view('tags', compact('tag'));
     }
 

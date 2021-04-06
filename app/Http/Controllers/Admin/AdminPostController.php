@@ -8,14 +8,13 @@ use App\Mail\PostDeleted;
 use App\Mail\PostUpdated;
 use App\Post;
 use App\PostTagsSync;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class AdminPostController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
+        $posts = Cache::tags(['posts'])->remember('adminPostList', 3600, fn() => Post::all());
         return view('admin.posts.index', compact('posts'));
     }
 

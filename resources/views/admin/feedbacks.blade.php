@@ -1,5 +1,9 @@
 @extends('layout.master')
 
+@section('title')
+    Отбращения
+@endsection
+
 @section('content')
     <table class="table">
         <thead class="thead-dark">
